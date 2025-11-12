@@ -1,0 +1,20 @@
+BEGIN TRANSACTION: Marca el inicio de una unidad de trabajo. Todos los comandos DML (UPDATE, INSERT, DELETE) entre este comando y el final son temporales.
+
+COMMIT: Le dice a la base de datos que la operación fue exitosa y que los cambios deben ser guardados permanentemente.
+
+PRINT 'Iniciando Transacción: Se aumentarán 10 horas de vacaciones al Empleado 273.';
+
+BEGIN TRANSACTION;
+
+-- 1. La Operación: Aumentar 10 horas de vacaciones
+UPDATE HumanResources.Employee
+SET VacationHours = VacationHours + 10
+WHERE BusinessEntityID = 273;
+
+-- 2. Confirmación: Guardar el cambio
+COMMIT;
+
+PRINT 'Transacción exitosa. Los cambios han sido GUARDADOS.';
+
+-- Verificación: Ejecuta este SELECT para ver que las horas aumentaron de forma permanente.
+SELECT BusinessEntityID, VacationHours FROM HumanResources.Employee WHERE BusinessEntityID = 273;
