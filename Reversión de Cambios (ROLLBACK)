@@ -1,0 +1,19 @@
+ROLLBACK: Le indica a la base de datos que deshaga todos los cambios que se hicieron desde el último BEGIN TRANSACTION. 
+La base de datos vuelve a su estado original antes de que se iniciara la transacción.
+
+PRINT 'Iniciando Transacción: Se intentarán aumentar 10 horas, pero se revertirán.';
+
+BEGIN TRANSACTION;
+
+-- 1. La Operación: Aumentar 10 horas de vacaciones (cambio temporal)
+UPDATE HumanResources.Employee
+SET VacationHours = VacationHours + 10
+WHERE BusinessEntityID = 274;
+
+-- 2. Reversión: Deshacer el cambio
+ROLLBACK;
+
+PRINT 'Transacción revertida. Los cambios han sido CANCELADOS.';
+
+-- Verificación: Ejecuta este SELECT. Las horas NO deben haber cambiado.
+SELECT BusinessEntityID, VacationHours FROM HumanResources.Employee WHERE BusinessEntityID = 274;
