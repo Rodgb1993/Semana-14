@@ -1,0 +1,21 @@
+ROLLBACK garantiza que, si algo sale mal después de la inserción, el registro incompleto no contamine la tabla.
+
+
+PRINT 'Iniciando Transacción: Se insertará un departamento de PRUEBA.';
+
+BEGIN TRANSACTION;
+
+-- 1. La Operación: Insertar un nuevo departamento
+INSERT INTO HumanResources.Department (Name, GroupName, ModifiedDate)
+VALUES ('Departamento de Prueba', 'Research and Development', GETDATE());
+
+-- Verificación Temporal: Puedes ejecutar un SELECT aquí y verás el dato,
+-- pero SOLO en tu sesión (aún no está guardado).
+
+-- 2. Reversión: Deshacer el cambio
+ROLLBACK;
+
+PRINT 'Transacción revertida. El departamento de prueba fue eliminado.';
+
+-- Verificación Final: Ejecuta este SELECT. NO debe aparecer el 'Departamento de Prueba'.
+SELECT Name FROM HumanResources.Department WHERE Name = 'Departamento de Prueba';
