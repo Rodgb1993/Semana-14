@@ -1,0 +1,24 @@
+Teoría: Lógica Transaccional
+En la vida real, solo hacemos COMMIT si se cumplen todas las condiciones. Aquí usamos IF para comprobar si el número de filas afectadas es el esperado.
+
+
+
+-- 1. La Operación: Aumentar 1000 al bono de un grupo de 5 vendedores
+UPDATE Sales.SalesPerson
+SET Bonus = Bonus + 1000.00
+WHERE TerritoryID = 1 AND SalesQuota > 0;
+
+-- 2. Verificación: Guardar cuántas filas se actualizaron
+SET @FilasAfectadas = @@ROWCOUNT; -- Variable del sistema que guarda las filas afectadas por el último comando
+
+-- 3. Decisión: Si no se afectaron 5 filas, algo falló (ROLLBACK)
+IF @FilasAfectadas = 5
+BEGIN
+    COMMIT;
+    PRINT 'ÉXITO: Se actualizaron 5 vendedores y se CONFIRMÓ la transacción.';
+END
+ELSE
+BEGIN
+    ROLLBACK;
+    PRINT 'FALLO: Solo se actualizaron ' + CAST(@FilasAfectadas AS VARCHAR) + ' vendedores. Se REVIRTIÓ todo.';
+END
